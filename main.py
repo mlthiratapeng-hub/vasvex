@@ -203,7 +203,7 @@ async def check(interaction: discord.Interaction):
     
     # ดึงตัวอย่างรายชื่อ 10 คนแรก
     user_list = []
-    for uid, udata in list(db.items())[:10]:
+    for uid, udata in list(db.items())[:100]:
         user_list.append(f"• <@{uid}> (`{udata.get('username', 'N/A')}`)")
     
     if user_list:
