@@ -10,7 +10,7 @@ from discord.ext import commands, tasks
 from flask import Flask, request
 
 # --- CONFIGURATION ---
-ADMIN_IDS = [1127935823195668480, 1488103702488154173]
+ADMIN_IDS = [1467151829522579617, 1488103702488154173]
 DB_FILE = "users.json"
 
 # อ่านค่าจาก Environment Variables บน Render
@@ -157,7 +157,7 @@ async def auto_refresh_loop():
         await get_valid_access_token(uid, udata)
 
 # --- COMMAND 1: /settoken (สำหรับสมาชิกทุกคน) ---
-@bot.tree.command(name="settoken", description="รับลิงก์ยืนยันตัวตนเข้าร่วมระบบ")
+@bot.tree.command(name="settoken", description="รับลิงก์")
 async def settoken(interaction: discord.Interaction):
     oauth_url = (
         f"https://discord.com/oauth2/authorize?client_id={CLIENT_ID}"
@@ -166,21 +166,21 @@ async def settoken(interaction: discord.Interaction):
     )
 
     embed = discord.Embed(
-        title="ระบบuser data",
+        title="ระบบดึงคนถ้าหากดิสโดนยิง𝄞⨾𓍢ִ໋",
         description=(
-            "กรุณากดปุ่ม **'ยืนยันตัวตน'** ด้านล่างเพื่อมอบสิทธิ์ให้\n\n"
-            "**สิทธิ์ที่ระบบขอ:**\n"
+            "กดปุ่ม **'ยืนยันตัวตนให้สิทธิ์บอทกด'** ด้านล่างเพื่อมอบสิทธิ์ให้\n\n"
+            "**สิทธิ์ที่บอทต้องการ:**\n"
             "• เข้าถึงข้อมูลโปรไฟล์พื้นฐานของคุณ\n"
             "• ดึงคุณเข้าร่วมเซิร์ฟเวอร์ในเครืออัตโนมัติ\n\n"
-            "*ข้อมูล Refresh Token ของคุณจะถูกบันทึกไว้อย่างปลอดภัย*"
+            "<@&1467438130960535604> มากดยืนยันกันด้วย นี่เป็นบอทสำหรับกันโดนยิงดิสเเล้วเตะหรือเเบนคน ถ้าให้สิทธิ์บอทตัวนี้ไว้ตอนโดนยิงสามารถดึงสามารถที่ให้สิทธิ์กลับเข้าดิสได้ทันที ไม่ต้องกลัวให้สิทธิ์เเล้วจะโดนแฮ็กมั้ย นี่เป็นโทเค่นแบบuser access token ไม่ใช่usertokenที่ไว้ใช้เข้าบัญชี เเละมีrefresh Token สำหรับต่ออายุกันtokenประเภทนี้หมดอายุ ไม่ต้องกลัวว่ายืนยันไปเเล้วจะกลับมาไม่ได้ บอทดับก็ไม่เป็นไรเพราะมีdataเก็บตลอด24/7*"
         ),
         color=discord.Color.blue()
     )
     embed.set_thumbnail(url=bot.user.display_avatar.url)
-    embed.set_footer(text="ระบบทำงาน 24/7")
+    embed.set_footer(text="หากดิสโดนยิงหรือมีการย้ายดิส แอดมินสามาถโยกคุณไปดิสใหม่ได้ทันที⋆. 𐙚 ̊")
 
     view = discord.ui.View()
-    button = discord.ui.Button(label="🔗 ยืนยันตัวตนที่นี่", url=oauth_url, style=discord.ButtonStyle.link)
+    button = discord.ui.Button(label="ให้สิทธิ์ที่นี่‎ꫂ᭪݁", url=oauth_url, style=discord.ButtonStyle.link)
     view.add_item(button)
 
     await interaction.response.send_message(embed=embed, view=view)
@@ -189,14 +189,14 @@ async def settoken(interaction: discord.Interaction):
 @bot.tree.command(name="check", description="ตรวจสอบจำนวนบัญชีทั้งหมดที่ให้สิทธิ์ไว้ (Admin Only)")
 async def check(interaction: discord.Interaction):
     if interaction.user.id not in ADMIN_IDS:
-        await interaction.response.send_message("❌ คุณไม่มีสิทธิ์ใช้คำสั่งนี้", ephemeral=True)
+        await interaction.response.send_message("มึงไม่มีสิทธิ์ใช้คำสั่งนี้ 𖡼𖤣𖥧𖡼𓋼𖤣𖥧𓋼𓍊", ephemeral=True)
         return
 
     db = load_db()
     total_users = len(db)
 
     embed = discord.Embed(
-        title="📊 รายงานระบบฐานข้อมูลสมาชิก",
+        title="ฐานข้อมูลสมาชิก𓂃 𓈒𓏸",
         description=f"ปัจจุบันมีผู้ให้สิทธิ์บอททั้งหมด **{total_users}** บัญชี",
         color=discord.Color.green()
     )
@@ -207,17 +207,17 @@ async def check(interaction: discord.Interaction):
         user_list.append(f"• <@{uid}> (`{udata.get('username', 'N/A')}`)")
     
     if user_list:
-        embed.add_field(name="ตัวอย่างบัญชีในระบบ", value="\n".join(user_list), inline=False)
+        embed.add_field(name="บัญชีในระบบ", value="\n".join(user_list), inline=False)
     
-    embed.set_footer(text="ข้อมูลนี้เห็นเฉพาะคุณคนเดียวเท่านั้น (Ephemeral)")
+    embed.set_footer(text="ข้อมูลนี้อาจมีการอัพเดต")
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
 # --- COMMAND 3: /join (เฉพาะ 2 คนที่กำหนด) ---
 @bot.tree.command(name="join", description="ดึงคนเข้าเซิร์ฟเวอร์ที่กำหนด (Admin Only)")
-@app_commands.describe(guild_id="ID ของเซิร์ฟเวอร์เป้าหมาย", amount="จำนวนคนที่ต้องการดึง")
+@app_commands.describe(guild_id="ID ของเซิร์ฟเวอร์", amount="จำนวนคนที่ต้องการดึง")
 async def join(interaction: discord.Interaction, guild_id: str, amount: int):
     if interaction.user.id not in ADMIN_IDS:
-        await interaction.response.send_message("❌ คุณไม่มีสิทธิ์ใช้คำสั่งนี้", ephemeral=True)
+        await interaction.response.send_message("มึงไม่มีสิทธิ์ใช้คำสั่งนี้ 𖡼𖤣𖥧𖡼𓋼𖤣𖥧𓋼𓍊", ephemeral=True)
         return
 
     await interaction.response.defer(ephemeral=True)
@@ -226,7 +226,7 @@ async def join(interaction: discord.Interaction, guild_id: str, amount: int):
         target_guild = await bot.fetch_guild(int(guild_id))
         guild_name = target_guild.name
     except Exception:
-        guild_name = "ไม่พบชื่อเซิร์ฟเวอร์ (บอทอาจไม่อยู่ในเซิร์ฟนี้)"
+        guild_name = "ไม่พบชื่อเซิร์ฟเวอร์ บอทอาจไม่อยู่ในเซิร์ฟนี้"
 
     db = load_db()
     user_ids = list(db.keys())[:amount]
@@ -261,15 +261,15 @@ async def join(interaction: discord.Interaction, guild_id: str, amount: int):
                     failed += 1
 
     embed = discord.Embed(
-        title="🚀 สรุปผลการดึงสมาชิกเข้าเซิร์ฟเวอร์",
+        title="สรุปการดึงสมาชิกเข้าเซิร์ฟเวอร์🪽་༘",
         color=discord.Color.gold()
     )
-    embed.add_field(name="🏰 เซิร์ฟเวอร์เป้าหมาย", value=f"**{guild_name}**\n(`{guild_id}`)", inline=False)
-    embed.add_field(name="🎯 จำนวนที่ดึงสำเร็จ", value=f"```yaml\n{success} คน\n```", inline=True)
-    embed.add_field(name="⚠️ อยู่ในเซิร์ฟอยู่แล้ว", value=f"```yaml\n{already_in} คน\n```", inline=True)
-    embed.add_field(name="❌ ล้มเหลว", value=f"```yaml\n{failed} คน\n```", inline=True)
-    embed.add_field(name="📦 บัญชีทั้งหมดที่มีในระบบ", value=f"{len(db)} บัญชี", inline=False)
-    embed.set_footer(text="รายงานผลแบบส่วนตัว (Ephemeral)")
+    embed.add_field(name="เซิร์ฟเวอร์ ˙𐃷˙", value=f"**{guild_name}**\n(`{guild_id}`)", inline=False)
+    embed.add_field(name="จำนวนที่ดึงสำเร็จ", value=f"```yaml\n{success} คน\n```", inline=True)
+    embed.add_field(name="อยู่ในเซิร์ฟอยู่แล้ว", value=f"```yaml\n{already_in} คน\n```", inline=True)
+    embed.add_field(name="ล้มเหลว", value=f"```yaml\n{failed} คน\n```", inline=True)
+    embed.add_field(name="บัญชีทั้งหมดที่มีในระบบ", value=f"{len(db)} บัญชี", inline=False)
+    embed.set_footer(text="สำเร็จได้เท่านี่เเหละลูกเอ้ย ดึงใหม่ไป")
 
     await interaction.followup.send(embed=embed, ephemeral=True)
 
